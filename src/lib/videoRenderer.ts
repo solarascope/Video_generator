@@ -1,4 +1,4 @@
-import { callVideoApi, type StoryboardPayload, type StoryboardShot, type RenderSettings } from "../app/api/generate-video/route";
+import { callVideoApi, type StoryboardPayload, type StoryboardShot, type RenderSettings } from "./videoUtils";
 import { getConfiguredRenderProvider } from "./appConfig";
 
 export type RenderProvider = "json2video" | "runway" | "mock";

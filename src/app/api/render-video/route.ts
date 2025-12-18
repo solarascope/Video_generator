@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
-import type { StoryboardShot, RenderSettings } from "../generate-video/route";
+import type { StoryboardShot, RenderSettings } from "../../../lib/videoUtils";
 import { getActiveRenderer, type RenderProvider } from "../../../lib/videoRenderer";
 import { connectToDatabase } from "@/lib/db";
 import { Workspace } from "@/lib/models/Workspace";
