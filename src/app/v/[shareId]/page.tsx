@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { connectToDatabase } from "@/lib/db";
 import { SharedVideo } from "@/lib/models/SharedVideo";
@@ -58,12 +59,12 @@ export default async function PublicVideoPage(props: PublicVideoPageProps) {
 
         <footer className="pt-4 border-t border-zinc-100 text-[11px] text-zinc-500 flex items-center justify-between">
           <span>Made with SolaraVideo</span>
-          <a
+          <Link
             href="/"
             className="inline-flex items-center rounded-full border border-zinc-200 px-2.5 py-1 text-[11px] font-medium text-zinc-600 hover:text-zinc-900 hover:border-zinc-300 bg-white shadow-sm"
           >
             Try the generator
-          </a>
+          </Link>
         </footer>
       </div>
     </main>
