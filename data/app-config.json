@@ -1,0 +1,7 @@
+{
+  "maxUploadBytes": 26214400,
+  "maxRecordingSeconds": 30,
+  "renderProvider": "json2video",
+  "openAiApiKey": "",
+  "json2VideoApiKey": ""
+}
