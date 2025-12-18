@@ -115,7 +115,7 @@ function mapStoryboardToScenes(payload: StoryboardPayload) {
     
     const zoomValue = index % 2 === 0 ? 1 : 0;
     
-    const imageElement: Record<string, unknown> = {
+    const imageElement: { type: string; [key: string]: unknown } = {
       type: "image",
       model: "freepik-classic",
       prompt: shot.visual_prompt,

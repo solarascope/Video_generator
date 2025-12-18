@@ -1,9 +1,10 @@
 'use client';
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function ResetPasswordPage() {
+// 1. We move the main logic into this sub-component
+function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialToken = searchParams.get("token") || "";
@@ -61,83 +62,92 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-zinc-50 to-zinc-100 flex items-center justify-center px-4 py-8">
-      <div className="w-full max-w-md rounded-2xl bg-white shadow-xl border border-zinc-100 p-8 space-y-6">
-        <header className="space-y-1 text-center">
-          <h1 className="text-2xl font-semibold tracking-tight text-zinc-950">
-            Choose a new password
-          </h1>
-          <p className="text-sm text-zinc-600">
-            Paste your reset token or open this page from your reset link.
-          </p>
-        </header>
+    <div className="w-full max-w-md rounded-2xl bg-white shadow-xl border border-zinc-100 p-8 space-y-6">
+      <header className="space-y-1 text-center">
+        <h1 className="text-2xl font-semibold tracking-tight text-zinc-950">
+          Choose a new password
+        </h1>
+        <p className="text-sm text-zinc-600">
+          Paste your reset token or open this page from your reset link.
+        </p>
+      </header>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-1">
-            <label className="block text-sm font-medium text-zinc-800" htmlFor="token">
-              Reset token
-            </label>
-            <input
-              id="token"
-              type="text"
-              value={token}
-              onChange={(e) => setToken(e.target.value)}
-              className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-900/5 focus:border-zinc-900/50"
-            />
-          </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-zinc-800" htmlFor="token">
+            Reset token
+          </label>
+          <input
+            id="token"
+            type="text"
+            value={token}
+            onChange={(e) => setToken(e.target.value)}
+            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-900/5 focus:border-zinc-900/50"
+          />
+        </div>
 
-          <div className="space-y-1">
-            <label className="block text-sm font-medium text-zinc-800" htmlFor="password">
-              New password
-            </label>
-            <input
-              id="password"
-              type="password"
-              autoComplete="new-password"
-              minLength={6}
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-900/5 focus:border-zinc-900/50"
-            />
-          </div>
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-zinc-800" htmlFor="password">
+            New password
+          </label>
+          <input
+            id="password"
+            type="password"
+            autoComplete="new-password"
+            minLength={6}
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-900/5 focus:border-zinc-900/50"
+          />
+        </div>
 
-          <div className="space-y-1">
-            <label className="block text-sm font-medium text-zinc-800" htmlFor="confirmPassword">
-              Confirm new password
-            </label>
-            <input
-              id="confirmPassword"
-              type="password"
-              autoComplete="new-password"
-              minLength={6}
-              required
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-900/5 focus:border-zinc-900/50"
-            />
-          </div>
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-zinc-800" htmlFor="confirmPassword">
+            Confirm new password
+          </label>
+          <input
+            id="confirmPassword"
+            type="password"
+            autoComplete="new-password"
+            minLength={6}
+            required
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-900/5 focus:border-zinc-900/50"
+          />
+        </div>
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
-          {message && <p className="text-sm text-emerald-700">{message}</p>}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-lg bg-zinc-900 text-white text-sm font-medium py-2.5 shadow-sm hover:bg-zinc-800 disabled:opacity-60 disabled:cursor-not-allowed"
-          >
-            {loading ? "Please wait..." : "Reset password"}
-          </button>
-        </form>
+        {error && <p className="text-sm text-red-600">{error}</p>}
+        {message && <p className="text-sm text-emerald-700">{message}</p>}
 
         <button
-          type="button"
-          onClick={() => router.push("/login")}
-          className="w-full text-xs text-zinc-500 hover:text-zinc-800"
+          type="submit"
+          disabled={loading}
+          className="w-full rounded-lg bg-zinc-900 text-white text-sm font-medium py-2.5 shadow-sm hover:bg-zinc-800 disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          Back to login
+          {loading ? "Please wait..." : "Reset password"}
         </button>
-      </div>
+      </form>
+
+      <button
+        type="button"
+        onClick={() => router.push("/login")}
+        className="w-full text-xs text-zinc-500 hover:text-zinc-800"
+      >
+        Back to login
+      </button>
+    </div>
+  );
+}
+
+// 2. The main page component wraps the form in Suspense
+export default function ResetPasswordPage() {
+  return (
+    <main className="min-h-screen bg-gradient-to-b from-zinc-50 to-zinc-100 flex items-center justify-center px-4 py-8">
+      <Suspense fallback={<div className="text-zinc-500 text-sm">Loading...</div>}>
+        <ResetPasswordForm />
+      </Suspense>
     </main>
   );
 }
